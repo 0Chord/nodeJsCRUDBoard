@@ -1,0 +1,71 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<table id="content-write">
+  <thead>
+  </thead>
+  <tbody>
+    <input id="my-id" type="hidden" value="{{content.id}}">
+    <tr>
+      <td>제목</td>
+      <td>{{content.title}}</td> 
+    </tr>
+    <tr>
+      <td>글쓴이</td>
+      <td>{{content.nickname}}</td>
+    </tr>
+    <tr>
+      <td>내용</td>
+      <td>{{content.content}}</td>
+    </tr>
+  </tbody>
+</table>
+<div>
+<input type="button" value="수정" id="modify">
+<input type="button" value="삭제" id="remove">
+<input type="button" value="처음으로" id="backing">
+</div>
+{%endblock%}
+
+{%block script %}
+<script>
+
+  const remove=document.querySelector('#remove');
+  const modify=document.querySelector('#modify');
+  const goback=document.querySelector('#backing');
+  
+  //338p
+  modify.addEventListener('click',(e)=>{
+    e.preventDefault();
+    const myId=document.querySelector("#my-id").value;
+    location.replace(`/contents/${myId}/edit`);
+  });
+  
+  remove.addEventListener('click',(e)=>{
+    e.preventDefault();
+    const myId=document.querySelector("#my-id").value;
+    axios.delete(`/contents/${myId}`)
+      .then((res)=>{
+        alert("삭제되었습니다");
+        location.replace("/");
+      })
+      .catch((err)=>{
+        console.error(err);
+      })
+  });
+
+  goback.addEventListener('click',(e)=>{
+    e.preventDefault();
+    const myId=document.querySelector("#my-id").value;
+    axios.get(`/contents/${myId}`)
+      .then(()=>{
+        alert("처음으로 이동합니다")
+        location.replace("/");
+      })
+      .catch((err)=>{
+        console.error(err);
+      });
+  });
+
+</script>
+{%endblock%}

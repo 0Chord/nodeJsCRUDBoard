@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+
+{%block content %}
+
+<table id="content-write">
+  <thead>
+  </thead>
+  <tbody>
+    <tr>
+      <td>제목</td>
+      <td><input id="title" type="text" name="제목"></td> 
+    </tr>
+    <tr>
+      <td>글쓴이</td>
+      <td><input id="nick" type="text" name="글쓴이"></td>
+    </tr>
+    <tr>
+      <td>내용</td>
+      <td><input id="content" type="text" name="내용"></td>
+    </tr>
+  </tbody>
+</table>
+<div>
+  <input type="button" value="저장" id="btn">
+  <input type="button" value="뒤로" id="back">
+
+</div>
+{%endblock%}
+
+{% block script %}
+<script>
+  const button=document.querySelector('#btn');
+  const back=document.querySelector('#back');
+ 
+  
+  button.addEventListener('click',(e)=>{
+    e.preventDefault();
+    const title=document.querySelector('#title').value;
+    const nickname=document.querySelector('#nick').value;
+    const content=document.querySelector('#content').value;
+    axios.post('/contents/write',{
+      title,nickname,content
+    })
+      .then((res)=>{
+        alert("저장이 되었습니다");
+        location.replace("/");
+      })
+      .catch((err)=>{
+        console.error(err);
+      });      
+  });
+
+  back.addEventListener('click',(e)=>{
+    e.preventDefault();
+    axios.get(`/contents/write`)
+      .then(()=>{
+        alert("처음으로 이동합니다")
+        location.replace("/");
+      })
+      .catch((err)=>{
+        console.error(err);
+      });
+  });
+
+</script>
+{% endblock %}

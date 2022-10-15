@@ -1,0 +1,45 @@
+{% extends 'layout.html' %} {%block content %}
+<a href="/contents/write" id="write-form" style="border: 5px solid #000000"
+  >글쓰기</a
+>
+<table id="content-form" style="border: 10px solid #000000">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #000000">ID</th>
+      <th style="border: 1px solid #000000">제목</th>
+      <th style="border: 1px solid #000000">글쓴이</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for content in contents%}
+    <tr id="view-form">
+      <td style="border: 1px solid #000000" id="user-id">{{content.id}}</td>
+      <td style="border: 1px solid #000000">{{content.title}}</td>
+      <td style="border: 1px solid #000000">{{content.nickname}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %} {% block script %}
+<script>
+  const writeform = document.querySelector("#write-form");
+
+  writeform.addEventListener("click", () => {
+    axios
+      .get(`/contents/write`)
+      .then(() => {
+        console.log("success");
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  });
+
+  document.querySelectorAll("#view-form").forEach((el) => {
+    el.addEventListener("click", () => {
+      const userId = el.querySelector("td").textContent;
+      location.href = `/contents/${userId}`;
+    });
+  });
+</script>
+{%endblock%}

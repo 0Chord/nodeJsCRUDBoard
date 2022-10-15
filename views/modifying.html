@@ -1,0 +1,68 @@
+{%extends 'layout.html'%}
+
+{%block content %}
+
+<table id="content-write">
+  <thead>
+  </thead>
+  <tbody>
+    <tr>
+      <input id="my-id" type="hidden" value="{{content.id}}">
+      <td>제목</td>
+      <td><input id="title" type="text" value="{{content.title}}"></td> 
+    </tr>
+    <tr>
+      <td>글쓴이</td>
+      <td>{{content.nickname}}</td>
+    </tr>
+    <tr>
+      <td>내용</td>
+      <td><input id="content" type="text" value="{{content.content}}"></td>
+    </tr>
+  </tbody>
+</table>
+<div>
+  <input type="button" value="저장" id="btn">
+  <input type="button" value="뒤로" id="back">
+
+</div>
+{%endblock%}
+
+{%block script %}
+<script>
+
+const button=document.querySelector('#btn');
+const back=document.querySelector('#back');
+ 
+  
+  button.addEventListener('click',(e)=>{
+    e.preventDefault();
+    const myId=document.querySelector("#my-id").value;
+    const title=document.querySelector('#title').value;
+    const content=document.querySelector('#content').value;
+    axios.patch(`/contents/${myId}/edit`,{
+      title,content
+    })
+      .then((res)=>{
+        alert("저장이 되었습니다");
+        location.replace(`/contents/${myId}`);
+      })
+      .catch((err)=>{
+        console.error(err);
+      });      
+  });
+
+back.addEventListener('click',(e)=>{
+    e.preventDefault();
+    const myId=document.querySelector("#my-id").value;
+    axios.get(`/contents/${myId}/edit`)
+      .then(()=>{
+        alert("처음으로 이동합니다")
+        location.replace("/");
+      })
+      .catch((err)=>{
+        console.error(err);
+      });
+  });
+</script>
+{%endblock%}
